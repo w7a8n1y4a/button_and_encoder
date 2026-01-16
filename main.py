@@ -2,6 +2,8 @@ import machine
 
 from pepeunit_micropython_client.client import PepeunitClient
 
+client = globals().get("client")  # provided by boot.py on device
+
 
 # ---- Hardware pins ----
 pin_button = None
@@ -10,8 +12,23 @@ pin_encoder_dt = None
 
 
 # ---- Encoder state ----
-_enc_last_clk = 1
-_enc_last_event_ms = 0
+# Quadrature decoder (CLK=A, DT=B)
+_enc_last_state = 0  # 2-bit AB state
+_enc_accum = 0       # accumulated +/- transitions
+_enc_last_publish_ms = 0
+
+# Transition table for quadrature decoding.
+# Index: (prev_state << 2) | curr_state, where state = (A<<1) | B
+# Produces +1 / -1 for valid single-step transitions; 0 otherwise.
+_ENC_TRANSITIONS = (
+    0, -1,  1,  0,
+    1,  0,  0, -1,
+   -1,  0,  0,  1,
+    0,  1, -1,  0,
+)
+
+# Most mechanical encoders generate 4 valid transitions per detent ("click")
+_ENC_STEPS_PER_DETENT = 4
 
 
 # ---- Button debounce + click state ----
@@ -69,7 +86,7 @@ def _maybe_publish_button_click(client: PepeunitClient, kind: str):
 
 def init_pins(client: PepeunitClient):
     global pin_button, pin_encoder_clk, pin_encoder_dt
-    global _enc_last_clk
+    global _enc_last_state, _enc_accum, _enc_last_publish_ms
 
     pin_button = machine.Pin(int(client.settings.PIN_BUTTON), machine.Pin.IN, machine.Pin.PULL_UP)
 
@@ -77,11 +94,15 @@ def init_pins(client: PepeunitClient):
     if bool(client.settings.FF_ENCODER_ENABLE):
         pin_encoder_clk = machine.Pin(int(client.settings.PIN_ENCODER_CLK), machine.Pin.IN, machine.Pin.PULL_UP)
         pin_encoder_dt = machine.Pin(int(client.settings.PIN_ENCODER_DT), machine.Pin.IN, machine.Pin.PULL_UP)
-        _enc_last_clk = pin_encoder_clk.value()
+        a = pin_encoder_clk.value()
+        b = pin_encoder_dt.value()
+        _enc_last_state = (a << 1) | b
+        _enc_accum = 0
+        _enc_last_publish_ms = 0
 
 
 def _handle_encoder(client: PepeunitClient, now_ms: int):
-    global _enc_last_clk, _enc_last_event_ms
+    global _enc_last_state, _enc_accum, _enc_last_publish_ms
 
     if not bool(client.settings.FF_ENCODER_ENABLE):
         return
@@ -89,25 +110,35 @@ def _handle_encoder(client: PepeunitClient, now_ms: int):
     if pin_encoder_clk is None or pin_encoder_dt is None:
         return
 
-    clk = pin_encoder_clk.value()
-    if clk == _enc_last_clk:
+    a = pin_encoder_clk.value()
+    b = pin_encoder_dt.value()
+    state = (a << 1) | b
+    prev = _enc_last_state
+    if state == prev:
         return
 
-    _enc_last_clk = clk
+    _enc_last_state = state
 
-    # Use rising edge of CLK
-    if clk != 1:
+    delta = _ENC_TRANSITIONS[(prev << 2) | state]
+    if delta == 0:
         return
 
-    if (now_ms - _enc_last_event_ms) < int(client.settings.ENCODER_DEBOUNCE_TIME):
+    _enc_accum += delta
+
+    # Optional publish rate limit (also helps with very noisy encoders)
+    if (now_ms - _enc_last_publish_ms) < int(client.settings.ENCODER_DEBOUNCE_TIME):
         return
 
-    dt = pin_encoder_dt.value()
+    # Emit only on full detent to avoid misreads from bounce.
+    while _enc_accum >= _ENC_STEPS_PER_DETENT:
+        _enc_accum -= _ENC_STEPS_PER_DETENT
+        _maybe_publish_rotation(client, 'Right')
+        _enc_last_publish_ms = now_ms
 
-    # Typical KY-040: on CLK rising, DT==0 -> clockwise.
-    direction = 'Right' if dt == 0 else 'Left'
-    _maybe_publish_rotation(client, direction)
-    _enc_last_event_ms = now_ms
+    while _enc_accum <= -_ENC_STEPS_PER_DETENT:
+        _enc_accum += _ENC_STEPS_PER_DETENT
+        _maybe_publish_rotation(client, 'Left')
+        _enc_last_publish_ms = now_ms
 
 
 def _commit_short_click(client: PepeunitClient, count: int):
@@ -222,6 +253,8 @@ def main(client: PepeunitClient):
 
 if __name__ == '__main__':
     try:
+        if client is None:
+            raise RuntimeError("PepeunitClient is not initialized (boot.py did not run?)")
         main(client)
     except KeyboardInterrupt:
         raise
