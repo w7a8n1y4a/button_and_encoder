@@ -31,6 +31,8 @@ def _maybe_publish_rotation(client: PepeunitClient, direction: str):
     # direction: "Right" / "Left"
     client.publish_to_topics('encoder_rotation/pepeunit', direction)
 
+    print(direction)
+
     if direction == 'Right':
         msg = client.settings.RIGHT_ROTATE_MESSAGE
         if msg is not None:
@@ -44,6 +46,8 @@ def _maybe_publish_rotation(client: PepeunitClient, direction: str):
 def _maybe_publish_button_click(client: PepeunitClient, kind: str):
     # kind: "One" / "Double" / "Triple" / "Long"
     client.publish_to_topics('button_click/pepeunit', kind)
+
+    print(kind)
 
     if kind == 'One':
         msg = client.settings.ONE_CLICK_MESSAGE
