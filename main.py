@@ -37,10 +37,6 @@ def _maybe_publish_button_click(client: PepeunitClient, kind: str):
         msg = client.settings.DOUBLE_CLICK_MESSAGE
         if msg is not None:
             client.publish_to_topics('button_double_click_messages/pepeunit', str(msg))
-    elif kind == 'Triple':
-        msg = client.settings.TRIPLE_CLICK_MESSAGE
-        if msg is not None:
-            client.publish_to_topics('button_triple_click_messages/pepeunit', str(msg))
     elif kind == 'Long':
         msg = client.settings.LONG_PRESS_MESSAGE
         if msg is not None:
@@ -94,7 +90,6 @@ def main(client: PepeunitClient):
         encoder_enabled=bool(client.settings.FF_ENCODER_ENABLE),
         button_debounce_ms=int(client.settings.BUTTON_DEBOUNCE_TIME),
         button_double_click_ms=int(client.settings.BUTTON_DOUBLE_CLICK_TIME),
-        button_triple_click_ms=int(client.settings.BUTTON_TRIPLE_CLICK_TIME),
         button_long_press_ms=int(client.settings.BUTTON_LONG_PRESS_TIME),
         encoder_debounce_ms=int(client.settings.ENCODER_DEBOUNCE_TIME),
         on_button=on_button,

@@ -14,8 +14,7 @@ class EncoderButton:
         pin_encoder_dt=None,
         button_debounce_ms=20,
         button_double_click_ms=250,
-        button_triple_click_ms=400,
-        button_long_press_ms=700,
+        button_long_press_ms=400,
         encoder_debounce_ms=20,
         encoder_enabled=True,
         steps_per_detent=4,
@@ -31,7 +30,6 @@ class EncoderButton:
 
         self.button_debounce_ms = int(button_debounce_ms)
         self.button_double_click_ms = int(button_double_click_ms)
-        self.button_triple_click_ms = int(button_triple_click_ms)
         self.button_long_press_ms = int(button_long_press_ms)
 
         self.encoder_debounce_ms = int(encoder_debounce_ms)
@@ -60,7 +58,6 @@ class EncoderButton:
 
         self._btn_click_count = 0
         self._btn_one_deadline_ms = None
-        self._btn_double_deadline_ms = None
 
     def _commit_short_click(self, count: int):
         if count <= 0:
@@ -69,7 +66,7 @@ class EncoderButton:
             return self.on_button("One")
         if count == 2:
             return self.on_button("Double")
-        return self.on_button("Triple")
+        return None
 
     def handle_encoder(self, now_ms: int):
         if not self.encoder_enabled:
@@ -137,7 +134,6 @@ class EncoderButton:
                     if press_dur >= self.button_long_press_ms:
                         self._btn_click_count = 0
                         self._btn_one_deadline_ms = None
-                        self._btn_double_deadline_ms = None
                         emitted = self.on_button("Long")
                         return emitted
 
@@ -145,13 +141,14 @@ class EncoderButton:
                     if self._btn_click_count == 1:
                         self._btn_one_deadline_ms = now_ms + self.button_double_click_ms
                     elif self._btn_click_count == 2:
-                        self._btn_one_deadline_ms = None
-                        self._btn_double_deadline_ms = now_ms + self.button_triple_click_ms
-                    else:
-                        emitted = self._commit_short_click(self._btn_click_count)
+                        emitted = self._commit_short_click(2)
                         self._btn_click_count = 0
                         self._btn_one_deadline_ms = None
-                        self._btn_double_deadline_ms = None
+                        return emitted
+                    else:
+                        emitted = None
+                        self._btn_click_count = 0
+                        self._btn_one_deadline_ms = None
                         return emitted
 
         if self._btn_stable == 0 and (not self._btn_long_fired) and self._btn_press_start_ms is not None:
@@ -159,20 +156,12 @@ class EncoderButton:
                 self._btn_long_fired = True
                 self._btn_click_count = 0
                 self._btn_one_deadline_ms = None
-                self._btn_double_deadline_ms = None
                 emitted = self.on_button("Long")
 
         if self._btn_one_deadline_ms is not None and now_ms >= self._btn_one_deadline_ms:
             emitted = self._commit_short_click(1)
             self._btn_click_count = 0
             self._btn_one_deadline_ms = None
-            self._btn_double_deadline_ms = None
-
-        if self._btn_double_deadline_ms is not None and now_ms >= self._btn_double_deadline_ms:
-            emitted = self._commit_short_click(2)
-            self._btn_click_count = 0
-            self._btn_one_deadline_ms = None
-            self._btn_double_deadline_ms = None
 
         return emitted
 

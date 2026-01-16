@@ -12,12 +12,11 @@
     "input_topic": [],
     "output_topic": [
         "button_click/pepeunit",
-        "button_one_click_messages/pepeunit",
-        "button_double_click_messages/pepeunit",
-        "button_triple_click_messages/pepeunit",
-        "button_long_press_messages/pepeunit",
+        "button_one_click_message/pepeunit",
+        "button_double_click_message/pepeunit",
+        "button_long_press_message/pepeunit",
         "encoder_rotation/pepeunit",
-        "encoder_right_rotate_messages/pepeunit",
-        "encoder_left_rotate_messages/pepeunit"
+        "encoder_right_rotate_message/pepeunit",
+        "encoder_left_rotate_message/pepeunit"
     ]
 }
