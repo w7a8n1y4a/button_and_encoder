@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+ampy -p /dev/ttyUSB0 -b 115200 mkdir ./lib
+ampy -p /dev/ttyUSB0 -b 115200 put ./lib/encoder.py ./lib/encoder.py
 ampy -p /dev/ttyUSB0 -b 115200 put ./main.py ./main.py
 ampy -p /dev/ttyUSB0 -b 115200 put ./boot.py ./boot.py
 ampy -p /dev/ttyUSB0 -b 115200 put ./env.json ./env.json
