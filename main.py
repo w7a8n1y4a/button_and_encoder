@@ -80,7 +80,6 @@ async def main_async(client: PepeunitClient):
     await client.time_manager.sync_epoch_ms_from_ntp()
 
     client.set_mqtt_input_handler(input_handler)
-    await client.mqtt_client.connect()
     await client.mqtt_client.subscribe_all_schema_topics()
     client.set_output_handler(output_handler)
     pin_button, pin_encoder_clk, pin_encoder_dt = init_pins(client)
