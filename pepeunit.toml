@@ -1,6 +1,6 @@
 [general]
 name = "Button and Encoder"
-description = "Обрабатывает нажатия кнопки (одиночный клик, двойной клик, долгое нажатие) и вращение энкодера. Публикует события в топики `button_click/pepeunit`, `encoder_rotation/pepeunit` и опциональные сообщения в `*_message/pepeunit`"
+description = "Обрабатывает нажатия кнопки (одиночный клик, двойной клик, долгое нажатие) и вращение энкодера. Публикует события в топик `encoder_action/pepeunit` и опциональные сообщения в `*_message/pepeunit`"
 language = "Micropython"
 hardware = ["esp8266", "KY-040", "button"]
 firmware = [
@@ -35,16 +35,14 @@ LEFT_ROTATE_MESSAGE = "Сообщение при повороте влево (и
 BUTTON_DEBOUNCE_TIME = "Время антидребезга кнопки в миллисекундах"
 BUTTON_DOUBLE_CLICK_TIME = "Окно для двойного клика в миллисекундах"
 BUTTON_LONG_PRESS_TIME = "Время долгого нажатия в миллисекундах"
-ENCODER_DEBOUNCE_TIME = "Время антидребезга энкодера в миллисекундах"
 PUC_WIFI_SSID = "Имя сети `WiFi`"
 PUC_WIFI_PASS = "Пароль от сети `WiFi`"
 
 [topic_assignment]
-"button_click/pepeunit" = "Тип нажатия кнопки: `One`, `Double` или `Long`"
+"encoder_action/pepeunit" = "Действие энкодера: `One`, `Double`, `Long` (кнопка) или `Right`, `Left` (вращение)"
 "button_one_click_message/pepeunit" = "Публикует `ONE_CLICK_MESSAGE` при одиночном клике (если задано)"
 "button_double_click_message/pepeunit" = "Публикует `DOUBLE_CLICK_MESSAGE` при двойном клике (если задано)"
 "button_long_press_message/pepeunit" = "Публикует `LONG_PRESS_MESSAGE` при долгом нажатии (если задано)"
-"encoder_rotation/pepeunit" = "Направление вращения энкодера: `Right` или `Left`"
 "encoder_right_rotate_message/pepeunit" = "Публикует `RIGHT_ROTATE_MESSAGE` при повороте вправо (если задано)"
 "encoder_left_rotate_message/pepeunit" = "Публикует `LEFT_ROTATE_MESSAGE` при повороте влево (если задано)"
 
@@ -55,10 +53,8 @@ steps = [
   "Синхронизация времени по `NTP`",
   "Инициализация пина кнопки и пинов энкодера (если `FF_ENCODER_ENABLE` = `true`)",
   "Запуск цикла опроса кнопки и энкодера каждую миллисекунду",
-  "При нажатии кнопки: публикация типа в `button_click/pepeunit` (`One`, `Double`, `Long`)",
-  "При наличии `*_CLICK_MESSAGE` — дополнительная публикация в соответствующий топик `*_message/pepeunit`",
-  "При вращении энкодера: публикация направления в `encoder_rotation/pepeunit` (`Right`, `Left`)",
-  "При наличии `*_ROTATE_MESSAGE` — дополнительная публикация в соответствующий топик `*_message/pepeunit`"
+  "При нажатии кнопки или вращении энкодера: публикация действия в `encoder_action/pepeunit` (`One`, `Double`, `Long`, `Right`, `Left`)",
+  "При наличии `*_CLICK_MESSAGE` / `*_ROTATE_MESSAGE` — дополнительная публикация в соответствующий топик `*_message/pepeunit`"
 ]
 
 [installation]

@@ -35,9 +35,8 @@ Authors | Ivan Serebrennikov <admin@silberworks.com>
 10. `BUTTON_DEBOUNCE_TIME` - Время антидребезга кнопки в миллисекундах
 11. `BUTTON_DOUBLE_CLICK_TIME` - Окно для двойного клика в миллисекундах
 12. `BUTTON_LONG_PRESS_TIME` - Время долгого нажатия в миллисекундах
-13. `ENCODER_DEBOUNCE_TIME` - Время антидребезга энкодера в миллисекундах
-14. `PUC_WIFI_SSID` - Имя сети `WiFi`
-15. `PUC_WIFI_PASS` - Пароль от сети `WiFi`
+13. `PUC_WIFI_SSID` - Имя сети `WiFi`
+14. `PUC_WIFI_PASS` - Пароль от сети `WiFi`
 
 ## Assignment of Device Topics
 
