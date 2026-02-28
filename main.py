@@ -9,46 +9,38 @@ from encoder import EncoderButton
 client = globals().get("client")
 _controller = None
 
-ENCODER_POLL_MS = 1
+ENCODER_POLL_MS = 10
 
 
-async def _encoder_poll_task(client: PepeunitClient, controller: EncoderButton):
+async def _encoder_poll_task(controller: EncoderButton):
     while True:
-        now_ms = client.time_manager.get_epoch_ms()
-        controller.handle_encoder(now_ms)
-        controller.handle_button(now_ms)
+        controller.handle_encoder()
+        controller.handle_button()
         await asyncio.sleep_ms(ENCODER_POLL_MS)
 
 
-async def _maybe_publish_rotation(client: PepeunitClient, direction: str):
-    await client.publish_to_topics('encoder_rotation/pepeunit', direction)
+async def _maybe_publish_action(client: PepeunitClient, action: str):
+    await client.publish_to_topics('encoder_action/pepeunit', action)
 
-    print(direction)
+    print(action)
 
-    if direction == 'Right':
+    if action == 'Right':
         msg = client.settings.RIGHT_ROTATE_MESSAGE
         if msg is not None:
             await client.publish_to_topics('encoder_right_rotate_message/pepeunit', str(msg))
-    else:
+    elif action == 'Left':
         msg = client.settings.LEFT_ROTATE_MESSAGE
         if msg is not None:
             await client.publish_to_topics('encoder_left_rotate_message/pepeunit', str(msg))
-
-
-async def _maybe_publish_button_click(client: PepeunitClient, kind: str):
-    await client.publish_to_topics('button_click/pepeunit', kind)
-
-    print(kind)
-
-    if kind == 'One':
+    elif action == 'One':
         msg = client.settings.ONE_CLICK_MESSAGE
         if msg is not None:
             await client.publish_to_topics('button_one_click_message/pepeunit', str(msg))
-    elif kind == 'Double':
+    elif action == 'Double':
         msg = client.settings.DOUBLE_CLICK_MESSAGE
         if msg is not None:
             await client.publish_to_topics('button_double_click_message/pepeunit', str(msg))
-    elif kind == 'Long':
+    elif action == 'Long':
         msg = client.settings.LONG_PRESS_MESSAGE
         if msg is not None:
             await client.publish_to_topics('button_long_press_message/pepeunit', str(msg))
@@ -85,11 +77,11 @@ async def main_async(client: PepeunitClient):
     pin_button, pin_encoder_clk, pin_encoder_dt = init_pins(client)
 
     def on_button(kind: str):
-        asyncio.create_task(_maybe_publish_button_click(client, kind))
+        asyncio.create_task(_maybe_publish_action(client, kind))
         return kind
 
     def on_rotate(direction: str):
-        asyncio.create_task(_maybe_publish_rotation(client, direction))
+        asyncio.create_task(_maybe_publish_action(client, direction))
         return direction
 
     _controller = EncoderButton(
@@ -100,12 +92,11 @@ async def main_async(client: PepeunitClient):
         button_debounce_ms=int(client.settings.BUTTON_DEBOUNCE_TIME),
         button_double_click_ms=int(client.settings.BUTTON_DOUBLE_CLICK_TIME),
         button_long_press_ms=int(client.settings.BUTTON_LONG_PRESS_TIME),
-        encoder_debounce_ms=int(client.settings.ENCODER_DEBOUNCE_TIME),
         on_button=on_button,
         on_rotate=on_rotate,
     )
 
-    asyncio.create_task(_encoder_poll_task(client, _controller))
+    asyncio.create_task(_encoder_poll_task(_controller))
     await client.run_main_cycle()
 
 

@@ -2,7 +2,7 @@
 
 Parameter | Implementation
 -- | --
-Description | Обрабатывает нажатия кнопки (одиночный клик, двойной клик, долгое нажатие) и вращение энкодера. Публикует события в топики `button_click/pepeunit`, `encoder_rotation/pepeunit` и опциональные сообщения в `*_message/pepeunit`
+Description | Обрабатывает нажатия кнопки (одиночный клик, двойной клик, долгое нажатие) и вращение энкодера. Публикует события в топик `encoder_action/pepeunit` и опциональные сообщения в `*_message/pepeunit`
 Lang | `Micropython`
 Hardware | `esp8266`, `KY-040`, `button`
 Firmware | [ESP8266_GENERIC-v1.27.0-PEPEUNIT-v1.1.1.bin](https://git.pepemoss.com/pepe/pepeunit/libs/pepeunit_micropython_client/-/package_files/60/download)
@@ -41,11 +41,10 @@ Authors | Ivan Serebrennikov <admin@silberworks.com>
 
 ## Assignment of Device Topics
 
-- `button_click/pepeunit` - Тип нажатия кнопки: `One`, `Double` или `Long`
+- `encoder_action/pepeunit` - Действие энкодера: `One`, `Double`, `Long` (кнопка) или `Right`, `Left` (вращение)
 - `button_one_click_message/pepeunit` - Публикует `ONE_CLICK_MESSAGE` при одиночном клике (если задано)
 - `button_double_click_message/pepeunit` - Публикует `DOUBLE_CLICK_MESSAGE` при двойном клике (если задано)
 - `button_long_press_message/pepeunit` - Публикует `LONG_PRESS_MESSAGE` при долгом нажатии (если задано)
-- `encoder_rotation/pepeunit` - Направление вращения энкодера: `Right` или `Left`
 - `encoder_right_rotate_message/pepeunit` - Публикует `RIGHT_ROTATE_MESSAGE` при повороте вправо (если задано)
 - `encoder_left_rotate_message/pepeunit` - Публикует `LEFT_ROTATE_MESSAGE` при повороте влево (если задано)
 
@@ -56,10 +55,8 @@ Authors | Ivan Serebrennikov <admin@silberworks.com>
 3. Синхронизация времени по `NTP`
 4. Инициализация пина кнопки и пинов энкодера (если `FF_ENCODER_ENABLE` = `true`)
 5. Запуск цикла опроса кнопки и энкодера каждую миллисекунду
-6. При нажатии кнопки: публикация типа в `button_click/pepeunit` (`One`, `Double`, `Long`)
-7. При наличии `*_CLICK_MESSAGE` — дополнительная публикация в соответствующий топик `*_message/pepeunit`
-8. При вращении энкодера: публикация направления в `encoder_rotation/pepeunit` (`Right`, `Left`)
-9. При наличии `*_ROTATE_MESSAGE` — дополнительная публикация в соответствующий топик `*_message/pepeunit`
+6. При нажатии кнопки или вращении энкодера: публикация действия в `encoder_action/pepeunit` (`One`, `Double`, `Long`, `Right`, `Left`)
+7. При наличии `*_CLICK_MESSAGE` / `*_ROTATE_MESSAGE` — дополнительная публикация в соответствующий топик `*_message/pepeunit`
 
 ## Installation
 

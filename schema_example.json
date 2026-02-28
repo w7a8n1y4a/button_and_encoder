@@ -11,11 +11,10 @@
     ],
     "input_topic": [],
     "output_topic": [
-        "button_click/pepeunit",
+        "encoder_action/pepeunit",
         "button_one_click_message/pepeunit",
         "button_double_click_message/pepeunit",
         "button_long_press_message/pepeunit",
-        "encoder_rotation/pepeunit",
         "encoder_right_rotate_message/pepeunit",
         "encoder_left_rotate_message/pepeunit"
     ]
