@@ -2,9 +2,9 @@
 name = "Button and Encoder"
 description = "Обрабатывает нажатия кнопки (одиночный клик, двойной клик, долгое нажатие) и вращение энкодера. Публикует события в топик `encoder_action/pepeunit` и опциональные сообщения в `*_message/pepeunit`"
 language = "Micropython"
-hardware = ["esp8266", "KY-040", "button"]
+hardware = ["esp8266", "esp32", "esp32c3", "esp32s3", "KY-040", "button"]
 firmware = [
-  {name = "ESP8266_GENERIC-v1.27.0-PEPEUNIT-v1.1.1.bin", link = "https://git.pepemoss.com/pepe/pepeunit/libs/pepeunit_micropython_client/-/package_files/60/download"}
+  {name = "RELEASE-1.1.1", link = "https://git.pepemoss.com/pepe/pepeunit/libs/pepeunit_micropython_client/-/releases/1.1.1"}
 ]
 stack = ["pepeunit_micropython_client"]
 version = "1.1.1"

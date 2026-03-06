@@ -4,8 +4,8 @@ Parameter | Implementation
 -- | --
 Description | Обрабатывает нажатия кнопки (одиночный клик, двойной клик, долгое нажатие) и вращение энкодера. Публикует события в топик `encoder_action/pepeunit` и опциональные сообщения в `*_message/pepeunit`
 Lang | `Micropython`
-Hardware | `esp8266`, `KY-040`, `button`
-Firmware | [ESP8266_GENERIC-v1.27.0-PEPEUNIT-v1.1.1.bin](https://git.pepemoss.com/pepe/pepeunit/libs/pepeunit_micropython_client/-/package_files/60/download)
+Hardware | `esp8266`, `esp32`, `esp32c3`, `esp32s3`, `KY-040`, `button`
+Firmware | [RELEASE-1.1.1](https://git.pepemoss.com/pepe/pepeunit/libs/pepeunit_micropython_client/-/releases/1.1.1)
 Stack | `pepeunit_micropython_client`
 Version | 1.1.1
 License | AGPL v3 License
