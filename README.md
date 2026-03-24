@@ -17,35 +17,41 @@ Authors | Ivan Serebrennikov <admin@silberworks.com>
 
 ## Physical IO
 
-- `client.settings.PIN_BUTTON` - Вывод кнопки
-- `client.settings.PIN_ENCODER_CLK` - Вывод `CLK` энкодера (работет только при `FF_ENCODER_ENABLE` = `true`)
-- `client.settings.PIN_ENCODER_DT` - Вывод `DT` энкодера (работет только при `FF_ENCODER_ENABLE` = `true`)
+Key | Description
+-- | --
+`client.settings.PIN_BUTTON` | Вывод кнопки
+`client.settings.PIN_ENCODER_CLK` | Вывод `CLK` энкодера (работет только при `FF_ENCODER_ENABLE` = `true`)
+`client.settings.PIN_ENCODER_DT` | Вывод `DT` энкодера (работет только при `FF_ENCODER_ENABLE` = `true`)
 
 ## Env variable assignment
 
-1. `FF_ENCODER_ENABLE` - Включить энкодер: `true` или `false`
-2. `PIN_BUTTON` - Номер пина кнопки
-3. `PIN_ENCODER_CLK` - Номер пина `CLK` энкодера
-4. `PIN_ENCODER_DT` - Номер пина `DT` энкодера
-5. `ONE_CLICK_MESSAGE` - Сообщение при одиночном клике (или `null` — не публиковать)
-6. `DOUBLE_CLICK_MESSAGE` - Сообщение при двойном клике (или `null` — не публиковать)
-7. `LONG_PRESS_MESSAGE` - Сообщение при долгом нажатии (или `null` — не публиковать)
-8. `RIGHT_ROTATE_MESSAGE` - Сообщение при повороте вправо (или `null` — не публиковать)
-9. `LEFT_ROTATE_MESSAGE` - Сообщение при повороте влево (или `null` — не публиковать)
-10. `BUTTON_DEBOUNCE_TIME` - Время антидребезга кнопки в миллисекундах
-11. `BUTTON_DOUBLE_CLICK_TIME` - Окно для двойного клика в миллисекундах
-12. `BUTTON_LONG_PRESS_TIME` - Время долгого нажатия в миллисекундах
-13. `PUC_WIFI_SSID` - Имя сети `WiFi`
-14. `PUC_WIFI_PASS` - Пароль от сети `WiFi`
+Variable | Description
+-- | --
+`FF_ENCODER_ENABLE` | Включить энкодер: `true` или `false`
+`PIN_BUTTON` | Номер пина кнопки
+`PIN_ENCODER_CLK` | Номер пина `CLK` энкодера
+`PIN_ENCODER_DT` | Номер пина `DT` энкодера
+`ONE_CLICK_MESSAGE` | Сообщение при одиночном клике (или `null` — не публиковать)
+`DOUBLE_CLICK_MESSAGE` | Сообщение при двойном клике (или `null` — не публиковать)
+`LONG_PRESS_MESSAGE` | Сообщение при долгом нажатии (или `null` — не публиковать)
+`RIGHT_ROTATE_MESSAGE` | Сообщение при повороте вправо (или `null` — не публиковать)
+`LEFT_ROTATE_MESSAGE` | Сообщение при повороте влево (или `null` — не публиковать)
+`BUTTON_DEBOUNCE_TIME` | Время антидребезга кнопки в миллисекундах
+`BUTTON_DOUBLE_CLICK_TIME` | Окно для двойного клика в миллисекундах
+`BUTTON_LONG_PRESS_TIME` | Время долгого нажатия в миллисекундах
+`PUC_WIFI_SSID` | Имя сети `WiFi`
+`PUC_WIFI_PASS` | Пароль от сети `WiFi`
 
 ## Assignment of Device Topics
 
-- `encoder_action/pepeunit` - Действие энкодера: `One`, `Double`, `Long` (кнопка) или `Right`, `Left` (вращение)
-- `button_one_click_message/pepeunit` - Публикует `ONE_CLICK_MESSAGE` при одиночном клике (если задано)
-- `button_double_click_message/pepeunit` - Публикует `DOUBLE_CLICK_MESSAGE` при двойном клике (если задано)
-- `button_long_press_message/pepeunit` - Публикует `LONG_PRESS_MESSAGE` при долгом нажатии (если задано)
-- `encoder_right_rotate_message/pepeunit` - Публикует `RIGHT_ROTATE_MESSAGE` при повороте вправо (если задано)
-- `encoder_left_rotate_message/pepeunit` - Публикует `LEFT_ROTATE_MESSAGE` при повороте влево (если задано)
+Topic | Description
+-- | --
+`encoder_action/pepeunit` | Действие энкодера: `One`, `Double`, `Long` (кнопка) или `Right`, `Left` (вращение)
+`button_one_click_message/pepeunit` | Публикует `ONE_CLICK_MESSAGE` при одиночном клике (если задано)
+`button_double_click_message/pepeunit` | Публикует `DOUBLE_CLICK_MESSAGE` при двойном клике (если задано)
+`button_long_press_message/pepeunit` | Публикует `LONG_PRESS_MESSAGE` при долгом нажатии (если задано)
+`encoder_right_rotate_message/pepeunit` | Публикует `RIGHT_ROTATE_MESSAGE` при повороте вправо (если задано)
+`encoder_left_rotate_message/pepeunit` | Публикует `LEFT_ROTATE_MESSAGE` при повороте влево (если задано)
 
 ## Work algorithm
 
