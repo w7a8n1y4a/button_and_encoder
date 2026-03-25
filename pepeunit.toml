@@ -15,7 +15,7 @@ authors = [
 
 
 [images]
-schema = "https://minio.pepemoss.com/public-data/image/button_encoder.png"
+schema = "https://minio.pepemoss.com/public-data/schema/button_encoder.png"
 
 [physical_io]
 "client.settings.PIN_BUTTON" = "Вывод кнопки"

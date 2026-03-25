@@ -13,7 +13,7 @@ Authors | Ivan Serebrennikov <admin@silberworks.com>
 
 ## Schema
 
-<div align="center"><img align="center" src="https://minio.pepemoss.com/public-data/image/button_encoder.png"></div>
+<div align="center"><img align="center" src="https://minio.pepemoss.com/public-data/schema/button_encoder.png"></div>
 
 ## Physical IO
 
